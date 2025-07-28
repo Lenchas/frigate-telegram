@@ -379,26 +379,15 @@ func SendMessageEvent(FrigateEvent EventStruct, bot *tgbotapi.BotAPI) {
 
 	} else {
 		// Normal message format
-		text += "*Event*\n"
-		text += "┣*Camera*\n┗ #" + NormalizeTagText(FrigateEvent.Camera) + "\n"
-		text += "┣*Label*\n┗ #" + NormalizeTagText(FrigateEvent.Label) + "\n"
+		text += "*Событие*\n"
+		text += "┣*Камера*\n┗ #" + NormalizeTagText(FrigateEvent.Camera) + "\n"
+		text += "┣*Метка*\n┗ #" + NormalizeTagText(FrigateEvent.Label) + "\n"
 		// if FrigateEvent.SubLabel != nil {
 		// 	text += "┣*SubLabel*\n┗ #" + strings.Join(GetTagList(FrigateEvent.SubLabel), ", #") + "\n"
 		// }
-		text += fmt.Sprintf("┣*Start time*\n┗ `%s", t_start) + "`\n"
-		if FrigateEvent.EndTime == 0 {
-			text += "┣*End time*\n┗ `In progess`" + "\n"
-		} else {
-			t_end := time.Unix(int64(FrigateEvent.EndTime), 0)
-			text += fmt.Sprintf("┣*End time*\n┗ `%s", t_end) + "`\n"
-		}
-		text += fmt.Sprintf("┣*Top score*\n┗ `%f", (FrigateEvent.Data.TopScore*100)) + "%`\n"
-		text += "┣*Event id*\n┗ `" + FrigateEvent.ID + "`\n"
-		text += "┣*Zones*\n┗ #" + strings.Join(GetTagList(FrigateEvent.Zones), ", #") + "\n"
-		text += "*URLs*\n"
-		text += "┣[Events](" + conf.FrigateExternalURL + "/events?cameras=" + FrigateEvent.Camera + "&labels=" + FrigateEvent.Label + "&zones=" + strings.Join(GetTagList(FrigateEvent.Zones), ",") + ")\n"
-		text += "┣[General](" + conf.FrigateExternalURL + ")\n"
-		text += "┗[Source clip](" + conf.FrigateExternalURL + "/api/events/" + FrigateEvent.ID + "/clip.mp4)\n"
+		text += "*Ссылки*\n"
+		text += "┣[Записи](" + conf.FrigateExternalURL + "/events?cameras=" + FrigateEvent.Camera + "&labels=" + FrigateEvent.Label + "&zones=" + strings.Join(GetTagList(FrigateEvent.Zones), ",") + ")\n"
+		text += "┣[Frigate](" + conf.FrigateExternalURL + ")\n"
 	}
 
 	var medias []interface{}
