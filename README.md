@@ -3,7 +3,7 @@
 
 # Frigate telegram
 
-Frigate telegram event notifications.
+Frigate telegram event notifications. 
 
 ---
 
