@@ -26,8 +26,8 @@ func main() {
 	conf := config.New()
 
 	// Prepare startup msg
-	startupMsg := "Starting frigate-telegram. "
-	startupMsg += "Frigate URL: " + conf.FrigateURL
+	startupMsg := "Запуск сервиса уведомлений видеонаблюдения. "
+	startupMsg += "Frigate: " + conf.FrigateURL
 	log.Info.Println(startupMsg)
 
 	if conf.RestAPIEnable {
