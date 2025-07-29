@@ -29,6 +29,7 @@ type EventsStruct []struct {
 		Score      float64       `json:"score"`
 		TopScore   float64       `json:"top_score"`
 		Type       string        `json:"type"`
+		MaxSeverity string      `json:"max_severity"`
 	} `json:"data"`
 	EndTime            float64     `json:"end_time"`
 	FalsePositive      interface{} `json:"false_positive"`
@@ -55,6 +56,7 @@ type EventStruct struct {
 		Score      float64       `json:"score"`
 		TopScore   float64       `json:"top_score"`
 		Type       string        `json:"type"`
+		MaxSeverity string      `json:"max_severity"`
 	} `json:"data"`
 	EndTime            float64     `json:"end_time"`
 	FalsePositive      interface{} `json:"false_positive"`
@@ -583,7 +585,13 @@ func ParseEvents(FrigateEvents EventsStruct, bot *tgbotapi.BotAPI, WatchDog bool
 			}
 		}
 		// Skip by label
-
+		// Skip by severity
+		if !(len(conf.FrigateIncludeSeverity) == 1 && conf.FrigateIncludeSeverity[0] == "All") {
+			if !(StringsContains(FrigateEvents[Event].Data.MaxSeverity, conf.FrigateIncludeSeverity)) {
+				log.Debug.Println("Skiping event by severity: " + FrigateEvents[Event].Data.MaxSeverity)
+				continue
+			}
+		}
 		// Skip by zone
 		zones := GetTagList(FrigateEvents[Event].Zones)
 		needSkip := false
