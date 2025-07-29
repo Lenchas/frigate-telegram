@@ -2,7 +2,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/OldTyT/frigate-telegram)](https://goreportcard.com/report/OldTyT/frigate-telegram)
 [![GolangCI](https://golangci.com/badges/github.com/OldTyT/frigate-telegram.svg)](https://golangci.com/r/github.com/OldTyT/frigate-telegram)
 
-# Frigate telegram
+# Frigate telegram (Modified by AI Cursor)
 
 Frigate telegram event notifications. 
 
