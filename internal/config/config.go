@@ -32,6 +32,7 @@ type Config struct {
 	FrigateIncludeLabel     []string
 	FrigateExcludeZone      []string
 	FrigateIncludeZone      []string
+	FrigateIncludeSeverity  []string
 }
 
 // New returns a new Config struct
@@ -58,6 +59,7 @@ func New() *Config {
 		FrigateIncludeLabel:     getEnvAsSlice("FRIGATE_INCLUDE_LABEL", []string{"All"}, ","),
 		FrigateExcludeZone:      getEnvAsSlice("FRIGATE_EXCLUDE_ZONE", []string{"None"}, ","),
 		FrigateIncludeZone:      getEnvAsSlice("FRIGATE_INCLUDE_ZONE", []string{"All"}, ","),
+		FrigateIncludeSeverity:  getEnvAsSlice("FRIGATE_INCLUDE_SEVERITY", []string{"All"}, ","),
 		RestAPIEnable:           getEnvAsBool("REST_API_ENABLE", false),
 		ShortEventMessageFormat: getEnvAsBool("SHORT_EVENT_MESSAGE_FORMAT", false),
 		IncludeThumbnailEvent:   getEnvAsBool("INCLUDE_THUMBNAIL_EVENT", true),
