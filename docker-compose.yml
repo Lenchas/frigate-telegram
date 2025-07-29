@@ -33,6 +33,7 @@ services:
       TZ: Europe/Berlin
       REDIS_ADDR: "redis:6379"
       REST_API_ENABLE: False
+      FRIGATE_INCLUDE_SEVERITY: "alert"
     volumes:
       - type: tmpfs # Optional
         target: /tmp
