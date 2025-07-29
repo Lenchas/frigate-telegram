@@ -1,3 +1,4 @@
+// Created by AI Cursor
 package frigate
 
 import (
@@ -585,13 +586,7 @@ func ParseEvents(FrigateEvents EventsStruct, bot *tgbotapi.BotAPI, WatchDog bool
 			}
 		}
 		// Skip by label
-		// Skip by severity
-		if !(len(conf.FrigateIncludeSeverity) == 1 && conf.FrigateIncludeSeverity[0] == "All") {
-			if !(StringsContains(FrigateEvents[Event].Data.MaxSeverity, conf.FrigateIncludeSeverity)) {
-				log.Debug.Println("Skiping event by severity: " + FrigateEvents[Event].Data.MaxSeverity)
-				continue
-			}
-		}
+
 		// Skip by zone
 		zones := GetTagList(FrigateEvents[Event].Zones)
 		needSkip := false
@@ -624,6 +619,15 @@ func ParseEvents(FrigateEvents EventsStruct, bot *tgbotapi.BotAPI, WatchDog bool
 			continue
 		}
 		// Skip by zone
+
+		// Skip by severity
+		if !(len(conf.FrigateIncludeSeverity) == 1 && conf.FrigateIncludeSeverity[0] == "All") {
+			if !(StringsContains(FrigateEvents[Event].Data.MaxSeverity, conf.FrigateIncludeSeverity)) {
+				log.Debug.Println("Skiping event by severity: " + FrigateEvents[Event].Data.MaxSeverity)
+				continue
+			}
+		}
+		// Skip by severity
 
 		if redis.CheckEvent(RedisKeyPrefix + FrigateEvents[Event].ID) {
 			if WatchDog {

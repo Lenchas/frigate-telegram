@@ -1,3 +1,4 @@
+<!-- Created by AI Cursor -->
 [![Go Report Card](https://goreportcard.com/badge/github.com/OldTyT/frigate-telegram)](https://goreportcard.com/report/OldTyT/frigate-telegram)
 [![GolangCI](https://golangci.com/badges/github.com/OldTyT/frigate-telegram.svg)](https://golangci.com/r/github.com/OldTyT/frigate-telegram)
 
@@ -52,6 +53,7 @@ docker compose up -d
 | `FRIGATE_INCLUDE_LABEL` | `All` | List Include frigate event, separate `,` |
 | `FRIGATE_EXCLUDE_ZONE` | `None` | List exclude frigate zone, separate `,` |
 | `FRIGATE_INCLUDE_ZONE` | `All` | List Include frigate zone, separate `,` |
+| `FRIGATE_INCLUDE_SEVERITY` | `All` | List Include frigate severity (alert, detection), separate `,` |
 | `REST_API_ENABLE` | `False` | Enabling the http rest API |
 | `REST_API_LISTEN_ADDR` | `:8080` | Rest API listen addr |
 | `SHORT_EVENT_MESSAGE_FORMAT` | `False` | Short event message format |
