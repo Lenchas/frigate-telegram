@@ -2,7 +2,12 @@
 package main
 
 import (
+	"context"
+	"net/http"
+	"os/signal"
 	"strconv"
+	"strings"
+	"syscall"
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -36,12 +41,25 @@ func main() {
 	}
 
 	// Initializing telegram bot
-	bot, err := tgbotapi.NewBotAPI(conf.TelegramBotToken)
+	telegram.ConfigureLogger(conf.TelegramBotToken)
+	bot, err := tgbotapi.NewBotAPIWithClient(conf.TelegramBotToken, tgbotapi.APIEndpoint, &http.Client{Timeout: 45 * time.Second})
 	if err != nil {
-		log.Error.Fatalln("Error initalizing telegram bot: " + err.Error())
+		log.Error.Fatalln("Error initializing telegram bot: " + strings.ReplaceAll(err.Error(), conf.TelegramBotToken, "[REDACTED]"))
 	}
 	bot.Debug = conf.Debug
 	log.Info.Println("Authorized on account " + bot.Self.UserName)
+
+	if conf.NotificationMode == "reviews" {
+		ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
+		defer cancel()
+		service, err := frigate.NewReviewService(conf, bot)
+		if err != nil {
+			log.Error.Fatalln(err)
+		}
+		go telegram.ChatBot(bot, conf)
+		service.Run(ctx)
+		return
+	}
 
 	// Send startup msg.
 	_, errmsg := bot.Send(tgbotapi.NewMessage(conf.TelegramChatID, startupMsg))

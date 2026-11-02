@@ -8,6 +8,13 @@ import (
 )
 
 type Config struct {
+	NotificationMode        string
+	ReviewAfter             int
+	ReviewLookbackSeconds   int
+	ReviewSettleSeconds     int
+	ReviewMaxWaitSeconds    int
+	ClipMaxSeconds          int
+	MediaMaxBytes           int
 	Debug                   bool
 	SendTextEvent           bool
 	RestAPIEnable           bool
@@ -39,6 +46,13 @@ type Config struct {
 // New returns a new Config struct
 func New() *Config {
 	return &Config{
+		NotificationMode:        getEnv("NOTIFICATION_MODE", "events"),
+		ReviewAfter:             getEnvAsInt("REVIEW_AFTER", 0),
+		ReviewLookbackSeconds:   getEnvAsInt("REVIEW_LOOKBACK_SECONDS", 86400),
+		ReviewSettleSeconds:     getEnvAsInt("REVIEW_SETTLE_SECONDS", 10),
+		ReviewMaxWaitSeconds:    getEnvAsInt("REVIEW_MAX_WAIT_SECONDS", 60),
+		ClipMaxSeconds:          getEnvAsInt("CLIP_MAX_SECONDS", 30),
+		MediaMaxBytes:           getEnvAsInt("MEDIA_MAX_BYTES", 25000000),
 		TelegramBotToken:        getEnv("TELEGRAM_BOT_TOKEN", ""),
 		FrigateURL:              getEnv("FRIGATE_URL", "http://localhost:5000"),
 		FrigateEventLimit:       getEnvAsInt("FRIGATE_EVENT_LIMIT", 20),

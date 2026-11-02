@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"strconv"
+	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/oldtyt/frigate-telegram/internal/config"
@@ -14,7 +15,8 @@ var redisErrorText string = "Error setting value, check logs."
 // ChatBot is needed to check the work of the bot.
 func ChatBot(bot *tgbotapi.BotAPI, conf *config.Config) {
 	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+	// Leave room for transport overhead within the HTTP client's 45s timeout.
+	u.Timeout = 30
 
 	updates := bot.GetUpdatesChan(u)
 
@@ -61,7 +63,7 @@ func ChatBot(bot *tgbotapi.BotAPI, conf *config.Config) {
 			msg.Text = "I don't know that command"
 		}
 		if _, err := bot.Send(msg); err != nil {
-			log.Error.Fatalln("Error sending message: " + err.Error())
+			log.Error.Println("Error sending command reply: " + strings.ReplaceAll(err.Error(), conf.TelegramBotToken, "[REDACTED]"))
 		}
 	}
 }

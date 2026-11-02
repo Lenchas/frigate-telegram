@@ -18,25 +18,39 @@ services:
       - /mnt/docker/redis/data:/data
 
   frigate-telegram:
-    image: ghcr.io/oldtyt/frigate-telegram:amd64
+    image: frigate-telegram:reviews
+    build:
+      context: .
+      dockerfile: docker/amd64/Dockerfile
     restart: always
     networks: [net]
     ports: 
       - 8080:8080
     environment:
-      TELEGRAM_BOT_TOKEN: 1234567890:ABCDEFGHEFGREHBTYJBTRGBER34T54Y54
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       FRIGATE_URL: http://192.168.0.254:5000
       FRIGATE_EVENT_LIMIT: 5
       DEBUG: False
-      TELEGRAM_CHAT_ID: "0"
-      SLEEP_TIME: 30
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      SLEEP_TIME: 10
       FRIGATE_EXTERNAL_URL: https://frigate.domain.com
       TZ: Europe/Berlin
       REDIS_ADDR: "redis:6379"
       REST_API_ENABLE: False
       FRIGATE_INCLUDE_SEVERITY: "alert"
+      FRIGATE_INCLUDE_LABEL: "person,car"
+      NOTIFICATION_MODE: "reviews"
+      REVIEW_MAX_WAIT_SECONDS: 60
+      CLIP_MAX_SECONDS: 30
+      MEDIA_MAX_BYTES: 25000000
+    stop_grace_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     volumes:
       - type: tmpfs # Optional
         target: /tmp
         tmpfs:
-          size: 10000000
+          size: 134217728

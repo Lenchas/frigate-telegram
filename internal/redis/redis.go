@@ -11,7 +11,7 @@ import (
 
 var (
 	RedisKeyStateSendEvent string          = "FrigateTelegramStoptSendEventMessage"
-	RedisKeyStateMuteEvent string          = "FrigateTelegramStoptSendEventMessage"
+	RedisKeyStateMuteEvent string          = "FrigateTelegramMuteEventMessage"
 	ctx                    context.Context = context.Background()
 	conf                   *config.Config  = config.New()
 )
