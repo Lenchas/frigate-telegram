@@ -241,7 +241,7 @@ func (s *ReviewService) deliver(parent context.Context, r Review, now time.Time)
 	}
 	if err == nil {
 		v := tgbotapi.NewVideo(s.conf.TelegramChatID, tgbotapi.FilePath(video))
-		v.Caption = caption + fmt.Sprintf("\nВидео: фрагмент до %d с.", s.conf.ClipMaxSeconds)
+		v.Caption = caption
 		v.SupportsStreaming = true
 		v.DisableNotification = muted
 		msg = v
@@ -275,6 +275,12 @@ func (s *ReviewService) deliver(parent context.Context, r Review, now time.Time)
 		return s.store.Release(ctx, r.ID, token)
 	}
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonURL("Открыть Frigate", s.conf.FrigateExternalURL)))
+	if s.conf.FrigateLocalURL != "" {
+		keyboard = tgbotapi.NewInlineKeyboardMarkup(
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonURL("🏠 Открыть камеры из дома", s.conf.FrigateLocalURL)),
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonURL("🌐 Открыть камеры вне дома", s.conf.FrigateExternalURL)),
+		)
+	}
 	switch m := msg.(type) {
 	case tgbotapi.VideoConfig:
 		m.DisableNotification = muted
@@ -313,13 +319,25 @@ func (s *ReviewService) caption(r Review, now time.Time) string {
 	for _, label := range r.Data.Objects {
 		switch label {
 		case "person":
-			label = "человек"
+			label = "🚶 человек"
 		case "car":
-			label = "машина"
+			label = "🚗 машина"
+		case "dog":
+			label = "🐕 собака"
+		case "cat":
+			label = "🐈 кошка"
 		}
 		labels = append(labels, label)
 	}
-	text := fmt.Sprintf("Тревога · %s\n%s\n%s", r.Camera, strings.Join(labels, ", "), time.Unix(int64(r.StartTime), 0).In(now.Location()).Format("02.01.2006 15:04:05"))
+	camera := r.Camera
+	for _, entry := range s.conf.CameraDisplayNames {
+		key, name, ok := strings.Cut(entry, "=")
+		if ok && strings.TrimSpace(key) == r.Camera && strings.TrimSpace(name) != "" {
+			camera = strings.TrimSpace(name)
+			break
+		}
+	}
+	text := fmt.Sprintf("%s\n%s\n%s", strings.Join(labels, ", "), camera, time.Unix(int64(r.StartTime), 0).In(now.Location()).Format("02.01.2006 15:04:05"))
 	if len(r.Data.Zones) > 0 {
 		text += "\nЗоны: " + strings.Join(r.Data.Zones, ", ")
 	}

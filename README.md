@@ -152,3 +152,12 @@ Commands:
 
 > [!WARNING]
 > For security reasons, commands only work in the TelegramChatID chat.
+
+Review captions can use camera display names configured in the bot, for example:
+`CAMERA_DISPLAY_NAMES=Gate=Ворота,Garage=Гараж,Yard=Двор,Balcony=Балкон`.
+Camera IDs and Frigate configuration remain unchanged; unmapped cameras keep their original names.
+
+Set `FRIGATE_LOCAL_URL` to the address reachable on your home network to show
+two camera buttons in review notifications: home access and external access.
+The external button uses `FRIGATE_EXTERNAL_URL`. If `FRIGATE_LOCAL_URL` is empty,
+the bot keeps the single external button.

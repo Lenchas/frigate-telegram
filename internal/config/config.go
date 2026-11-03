@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	CameraDisplayNames      []string
 	NotificationMode        string
 	ReviewAfter             int
 	ReviewLookbackSeconds   int
@@ -31,6 +32,7 @@ type Config struct {
 	TelegramBotToken        string
 	FrigateURL              string
 	FrigateExternalURL      string
+	FrigateLocalURL         string
 	RedisAddr               string
 	RedisPassword           string
 	RestAPIListenAddr       string
@@ -46,6 +48,7 @@ type Config struct {
 // New returns a new Config struct
 func New() *Config {
 	return &Config{
+		CameraDisplayNames:      getEnvAsSlice("CAMERA_DISPLAY_NAMES", nil, ","),
 		NotificationMode:        getEnv("NOTIFICATION_MODE", "events"),
 		ReviewAfter:             getEnvAsInt("REVIEW_AFTER", 0),
 		ReviewLookbackSeconds:   getEnvAsInt("REVIEW_LOOKBACK_SECONDS", 86400),
@@ -61,6 +64,7 @@ func New() *Config {
 		SleepTime:               getEnvAsInt("SLEEP_TIME", 5),
 		WatchDogSleepTime:       getEnvAsInt("WATCH_DOG_SLEEP_TIME", 3),
 		FrigateExternalURL:      getEnv("FRIGATE_EXTERNAL_URL", "http://localhost:5000"),
+		FrigateLocalURL:         getEnv("FRIGATE_LOCAL_URL", ""),
 		RedisAddr:               getEnv("REDIS_ADDR", "localhost:6379"),
 		RedisPassword:           getEnv("REDIS_PASSWORD", ""),
 		RedisDB:                 getEnvAsInt("REDIS_DB", 0),
